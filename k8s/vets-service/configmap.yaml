@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vets-service-config
+  namespace: spring-petclinic
+  labels:
+    app: vets-service
+data:
+  application.yml: |
+    server:
+      port: 8080
+      shutdown: graceful
+
+    vets:
+      cache:
+        ttl: 60
+        heap-size: 100
+
+    spring:
+      jpa:
+        open-in-view: false
+        hibernate:
+          ddl-auto: none
+
+    management:
+      security:
+        enabled: false
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
+    
+    logging:
+      level:
+        org:
+          springframework: INFO
+
+    ---
+    spring:
+      config:
+        activate:
+          on-profile: mysql
+      sql:
+        init:
+          schema-locations: classpath*:db/mysql/schema.sql
+          data-locations: classpath*:db/mysql/data.sql
+          mode: ALWAYS

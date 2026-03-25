@@ -1,0 +1,8 @@
+# Configuración para el Helm Chart de Bitnami MySQL
+auth:
+  database: petclinic
+  rootPassword: petclinic
+
+primary:
+  persistence:
+    enabled: false
