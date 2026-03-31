@@ -42,6 +42,11 @@ spec:
           requests:
             cpu: 500m
             memory: 512Mi
+        env:
+        - name: SPRING_CONFIG_IMPORT
+          value: ""
+        - name: SPRING_CLOUD_CONFIG_ENABLED
+          value: "false"
         volumeMounts:
         - name: config-volume
           mountPath: /config

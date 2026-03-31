@@ -2,29 +2,56 @@
 
 set -e
 
-echo "🚀 Iniciando el despliegue de Spring Petclinic en Kubernetes..."
+echo "🚀 Iniciando el despliegue secuencial de Spring Petclinic en Kubernetes..."
 
 echo "1. Preparando el Namespace..."
 # Crea el namespace si no existe
 kubectl apply -f k8s/0-init/namespace.yaml
 
-echo "2. Desplegando las bases de datos MySQL con Helm..."
-# Añadimos el repositorio de Bitnami
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm repo update
-# Instalamos las 3 bases de datos usando nuestro archivo values
-helm upgrade --install vets-db bitnami/mysql --namespace spring-petclinic -f k8s/0-init/mysql-values.yaml
-helm upgrade --install visits-db bitnami/mysql --namespace spring-petclinic -f k8s/0-init/mysql-values.yaml
-helm upgrade --install customers-db bitnami/mysql --namespace spring-petclinic -f k8s/0-init/mysql-values.yaml
+# echo "2. Preparando el repositorio de Helm..."
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm repo update
 
-echo "Esperando a que las bases de datos arranquen (esto puede tardar un par de minutos)..."
-# Kubernetes esperará hasta que los pods de MySQL estén listos antes de lanzar los microservicios de Java
-kubectl wait --namespace spring-petclinic --for=condition=ready pod -l app.kubernetes.io/name=mysql --timeout=300s
+# # ==========================================
+# # DOMINIO CUSTOMERS
+# # ==========================================
+# echo "3. Desplegando dominio CUSTOMERS..."
+# helm upgrade --install customers-db bitnami/mysql --namespace spring-petclinic -f k8s/0-init/mysql-values.yaml --set fullnameOverride=customers-db
 
-echo "3. Desplegando los microservicios..."
+# echo "⏳ Esperando a que customers-db arranque..."
+# kubectl wait --namespace spring-petclinic --for=condition=ready pod -l app.kubernetes.io/instance=customers-db --timeout=300s
+
+# echo "📦 Desplegando customers-service..."
+# kubectl apply -f k8s/customers-service/
+
+# # ==========================================
+# # DOMINIO VETS
+# # ==========================================
+# echo "4. Desplegando dominio VETS..."
+# helm upgrade --install vets-db bitnami/mysql --namespace spring-petclinic -f k8s/0-init/mysql-values.yaml --set fullnameOverride=vets-db
+
+# echo "⏳ Esperando a que vets-db arranque..."
+# kubectl wait --namespace spring-petclinic --for=condition=ready pod -l app.kubernetes.io/instance=vets-db --timeout=300s
+
+# echo "📦 Desplegando vets-service..."
+# kubectl apply -f k8s/vets-service/
+
+# # ==========================================
+# # DOMINIO VISITS
+# # ==========================================
+# echo "5. Desplegando dominio VISITS..."
+# helm upgrade --install visits-db bitnami/mysql --namespace spring-petclinic -f k8s/0-init/mysql-values.yaml --set fullnameOverride=visits-db
+
+# echo "⏳ Esperando a que visits-db arranque..."
+# kubectl wait --namespace spring-petclinic --for=condition=ready pod -l app.kubernetes.io/instance=visits-db --timeout=300s
+
+# echo "📦 Desplegando visits-service..."
+# kubectl apply -f k8s/visits-service/
+
+# ==========================================
+# FRONTEND / API GATEWAY
+# ==========================================
+echo "6. Desplegando API Gateway..."
 kubectl apply -f k8s/apigateway-service/
-kubectl apply -f k8s/customers-service/
-kubectl apply -f k8s/vets-service/
-kubectl apply -f k8s/visits-service/
 
 echo "✅ Despliegue completado con éxito"

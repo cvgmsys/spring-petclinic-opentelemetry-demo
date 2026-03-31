@@ -1,4 +1,9 @@
 # Configuración para el Helm Chart de Bitnami MySQL
+image:
+  registry: docker.io
+  repository: bitnamilegacy/mysql
+  tag: "8.0.35-debian-11-r0"
+
 auth:
   database: petclinic
   rootPassword: petclinic
@@ -6,3 +11,21 @@ auth:
 primary:
   persistence:
     enabled: false
+  # startupProbe:
+  #   enabled: true
+  #   initialDelaySeconds: 30
+  #   periodSeconds: 10
+  #   timeoutSeconds: 5
+  #   failureThreshold: 60
+  # readinessProbe:
+  #   enabled: true
+  #   initialDelaySeconds: 5
+  #   periodSeconds: 10
+  #   timeoutSeconds: 5
+  #   failureThreshold: 3
+  # livenessProbe:
+  #   enabled: true
+  #   initialDelaySeconds: 5
+  #   periodSeconds: 10
+  #   timeoutSeconds: 5
+  #   failureThreshold: 3
