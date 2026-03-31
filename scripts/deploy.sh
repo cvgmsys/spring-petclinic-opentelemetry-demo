@@ -27,4 +27,4 @@ kubectl apply -f k8s/customers-service/
 kubectl apply -f k8s/vets-service/
 kubectl apply -f k8s/visits-service/
 
-echo "✅ Despliegue completado con éxito"   
+echo "✅ Despliegue completado con éxito"
