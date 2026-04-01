@@ -7,19 +7,42 @@ metadata:
     app: api-gateway
 data:
   application.yml: |
-    zuul:
-      prefix: /api
-      ignoredServices: '*'
-      routes:
-        vets-service:
-          path: /vet/**
-          url: http://vets-service:8080
-        visits-service:
-          path: /visit/**
-          url: http://visits-service:8080
-        customers-service:
-          path: /customer/**
-          url: http://customers-service:8080
+    spring:
+      application:
+        name: api-gateway
+      cloud:
+        gateway:
+          server:
+            webflux:
+              default-filters:
+                - name: CircuitBreaker
+                  args:
+                    name: defaultCircuitBreaker
+                    fallbackUri: forward:/fallback
+                - name: Retry
+                  args:
+                    retries: 1
+                    statuses: SERVICE_UNAVAILABLE
+                    methods: POST
+              routes:
+                - id: vets-service
+                  uri: http://vets-service:8080
+                  predicates:
+                    - Path=/api/vet/**
+                  filters:
+                    - StripPrefix=2
+                - id: visits-service
+                  uri: http://visits-service:8080
+                  predicates:
+                    - Path=/api/visit/**
+                  filters:
+                    - StripPrefix=2
+                - id: customers-service
+                  uri: http://customers-service:8080
+                  predicates:
+                    - Path=/api/customer/**
+                  filters:
+                    - StripPrefix=2
 
     server:
       port: 8080
@@ -29,13 +52,7 @@ data:
         mime-types: application/json,text/css,application/javascript
         min-response-size: 2048
 
-    spring:
-      messages:
-        basename: messages/messages
-
     management:
-      security:
-        enabled: false
       endpoints:
         web:
           exposure:
@@ -48,24 +65,3 @@ data:
       level:
         org:
           springframework: INFO
-
-    ---
-    spring:
-      config:
-        activate:
-          on-profile: chaos-monkey      
-
-    management:
-      endpoint:
-        chaosmonkey:
-          enabled: true
-          
-    chaos:
-      monkey:
-        enabled: true
-        watcher:
-          component: false
-          controller: false
-          repository: false
-          rest-controller: false
-          service: false

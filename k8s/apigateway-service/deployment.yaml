@@ -42,9 +42,12 @@ spec:
           requests:
             cpu: 500m
             memory: 512Mi
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default
         volumeMounts:
         - name: config-volume
-          mountPath: /config
+          mountPath: /application/config
       volumes:
       - name: config-volume
         configMap:
