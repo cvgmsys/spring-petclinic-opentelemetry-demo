@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Iniciando el despliegue secuencial de Spring Petclinic en Kubernetes..."
+echo "🚀 Iniciando el despliegue de Spring Petclinic en Kubernetes..."
 
 echo "1. Preparando el Namespace..."
 # Crea el namespace si no existe
@@ -54,4 +54,8 @@ kubectl apply -f k8s/1-application/visits-service/
 echo "6. Desplegando API Gateway..."
 kubectl apply -f k8s/1-application/apigateway-service/
 
+echo "⏳ Esperando a que API Gateway esté disponible..."
+kubectl wait --namespace spring-petclinic --for=condition=available deployment/api-gateway --timeout=300s
+
 echo "✅ Despliegue completado con éxito"
+echo "Spring-petclinic UI: http://localhost:30080"

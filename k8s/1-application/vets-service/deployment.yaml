@@ -5,6 +5,8 @@ metadata:
     app: vets-service
   name: vets-service
   namespace: spring-petclinic
+  annotations:
+    instrumentation.opentelemetry.io/inject-java: "true"
 spec:
   replicas: 1
   selector:

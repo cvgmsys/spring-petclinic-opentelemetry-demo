@@ -5,6 +5,8 @@ metadata:
   namespace: spring-petclinic
   labels:
     app: api-gateway
+  annotations:
+    instrumentation.opentelemetry.io/inject-java: "true"
 spec:
   replicas: 1
   selector:
