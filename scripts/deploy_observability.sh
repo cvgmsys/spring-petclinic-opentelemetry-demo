@@ -12,26 +12,26 @@ kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releas
 kubectl wait --for=condition=Available deployment/opentelemetry-operator -n opentelemetry-operator-system --timeout=120s
 
 echo "3. Creando el Namespace.."
-kubectl apply -f k8s/2-observability/namespace.yaml
+kubectl apply -f k8s/1-observability/namespace.yaml
 
 # ==========================================
 # JAEGER
 # ==========================================
 echo "3. Desplegando Jaeger.."
-kubectl apply -f k8s/2-observability/jaeger.yaml
+kubectl apply -f k8s/1-observability/jaeger.yaml
 kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=jaeger-backend-collector -n observability --timeout=300s
 
 # ==========================================
 # OPENTELEMETRY COLLECTOR
 # ==========================================
 echo "3. Desplegando Otel Collector.."
-kubectl apply -f k8s/2-observability/otel-collector.yaml
+kubectl apply -f k8s/1-observability/otel-collector.yaml
 
 # ==========================================
 # AUTO-INSTRUMENTATION
 # ==========================================
 echo "3. Configurando auto-instrumentación.."
-kubectl apply -f k8s/2-observability/instrumentation.yaml
+kubectl apply -f k8s/1-observability/instrumentation.yaml
 
 
 echo "✅ Despliegue completado con éxito"
