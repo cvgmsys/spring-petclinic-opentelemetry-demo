@@ -3,10 +3,10 @@
 echo "🧹 Eliminando Spring Petclinic en el clúster..."
 
 echo "1. Eliminando los microservicios..."
-kubectl delete -f k8s/apigateway-service/ --namespace spring-petclinic --ignore-not-found
-kubectl delete -f k8s/customers-service/ --namespace spring-petclinic --ignore-not-found
-kubectl delete -f k8s/vets-service/ --namespace spring-petclinic --ignore-not-found
-kubectl delete -f k8s/visits-service/ --namespace spring-petclinic --ignore-not-found
+kubectl delete -f k8s/1-application/apigateway-service/ --namespace spring-petclinic --ignore-not-found
+kubectl delete -f k8s/1-application/customers-service/ --namespace spring-petclinic --ignore-not-found
+kubectl delete -f k8s/1-application/vets-service/ --namespace spring-petclinic --ignore-not-found
+kubectl delete -f k8s/1-application/visits-service/ --namespace spring-petclinic --ignore-not-found
 
 echo "2. Desinstalando las bases de datos de MySQL..."
 helm uninstall vets-db --namespace spring-petclinic --wait || true
