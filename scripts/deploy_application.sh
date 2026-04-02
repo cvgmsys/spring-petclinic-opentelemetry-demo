@@ -6,7 +6,7 @@ echo "🚀 Iniciando el despliegue de Spring Petclinic en Kubernetes..."
 
 echo "1. Preparando el Namespace..."
 # Crea el namespace si no existe
-kubectl apply -f k8s/0-init/namespace.yaml
+kubectl apply -f k8s/0-init/namespaces.yaml
 
 echo "2. Preparando el repositorio de Helm..."
 helm repo add bitnami https://charts.bitnami.com/bitnami

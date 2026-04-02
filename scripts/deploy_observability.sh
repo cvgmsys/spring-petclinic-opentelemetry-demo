@@ -6,13 +6,14 @@ echo "🚀 Iniciando el despliegue de las herramientas de Observabilidad en Kube
 echo "1. (Requisito) Instalando cert-manager..."
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.1/cert-manager.yaml
 kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+sleep 30
 
 echo "2. Instalando el Operator de OpenTelemetry..."
 kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/download/v0.148.0/opentelemetry-operator.yaml
-kubectl wait --for=condition=Available deployment/opentelemetry-operator -n opentelemetry-operator-system --timeout=120s
+kubectl wait --for=condition=Available deployment/opentelemetry-operator-controller-manager -n opentelemetry-operator-system --timeout=120s
 
 echo "3. Creando el Namespace.."
-kubectl apply -f k8s/1-observability/namespace.yaml
+kubectl apply -f k8s/0-init/namespaces.yaml
 
 # ==========================================
 # JAEGER

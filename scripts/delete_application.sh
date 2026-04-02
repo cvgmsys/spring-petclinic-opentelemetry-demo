@@ -14,6 +14,6 @@ helm uninstall visits-db --namespace spring-petclinic --wait || true
 helm uninstall customers-db --namespace spring-petclinic --wait || true
 
 echo "3. Eliminando el namespace..."
-kubectl delete -f k8s/0-init/namespace.yaml --ignore-not-found
+kubectl delete namespace spring-petclinic --ignore-not-found
 
 echo "✅ Todos los recursos eliminados del cluster."

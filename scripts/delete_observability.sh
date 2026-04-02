@@ -12,7 +12,7 @@ echo "3. Borrando Jaeger..."
 kubectl delete -f k8s/1-observability/jaeger.yaml --ignore-not-found=true
 
 echo "4. Borrando el Namespace..."
-kubectl delete -f k8s/1-observability/namespace.yaml --ignore-not-found=true
+kubectl delete namespace observability --ignore-not-found=true
 
 echo "5. Desinstalando el Operator de OpenTelemetry..."
 kubectl delete -f https://github.com/open-telemetry/opentelemetry-operator/releases/download/v0.148.0/opentelemetry-operator.yaml --ignore-not-found=true
