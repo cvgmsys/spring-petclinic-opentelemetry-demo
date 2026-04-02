@@ -6,6 +6,10 @@ metadata:
 spec:
   exporter:
     endpoint: http://otel-gateway-collector.observability.svc.cluster.local:4318
+  propagators:
+    - tracecontext
+    - baggage
+    - b3
   sampler:
     type: always_on
   java:
