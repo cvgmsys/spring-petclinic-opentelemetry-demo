@@ -20,6 +20,7 @@ kubectl apply -f k8s/0-init/namespaces.yaml
 # ==========================================
 echo "3. Desplegando Jaeger.."
 kubectl apply -f k8s/1-observability/jaeger.yaml
+sleep 10
 kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=jaeger-backend-collector -n observability --timeout=300s
 
 # ==========================================
