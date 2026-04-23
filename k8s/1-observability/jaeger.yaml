@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jaeger-ui-config
+  namespace: observability
+data:
+  ui.json: |-
+    {
+      "monitor": {
+        "menuEnabled": true
+      }
+    }
+---
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
@@ -8,6 +21,13 @@ spec:
   ports:
     - name: jaeger
       port: 16686
+  volumes:
+    - name: ui-config-volume
+      configMap:
+        name: jaeger-ui-config
+  volumeMounts:
+    - name: ui-config-volume
+      mountPath: /etc/jaeger
   config:
     service:
       extensions: [jaeger_storage, jaeger_query]
@@ -15,15 +35,26 @@ spec:
         traces:
           receivers: [otlp]
           exporters: [jaeger_storage_exporter]
+    
     extensions:
-      jaeger_query:
-        storage:
-          traces: memstore
       jaeger_storage:
         backends:
-          memstore:
-            memory:
-              max_traces: 100000
+          opensearch_storage: &opensearch_config
+            opensearch:
+              server_urls: 
+                - "https://admin:DemoPass123!@opensearch-cluster-master.observability.svc.cluster.local:9200"
+              tls:
+                insecure_skip_verify: true
+        metric_backends:
+          opensearch_storage: *opensearch_config
+          
+      jaeger_query:
+        storage:
+          traces: opensearch_storage
+          metrics: opensearch_storage
+        ui:
+          config_file: /etc/jaeger/ui.json
+            
     receivers:
       otlp:
         protocols:
@@ -31,9 +62,10 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
+            
     exporters:
       jaeger_storage_exporter:
-        trace_storage: memstore
+        trace_storage: opensearch_storage
 ---
 apiVersion: v1
 kind: Service

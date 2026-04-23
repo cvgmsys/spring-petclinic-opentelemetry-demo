@@ -16,9 +16,21 @@ echo "3. Creando el Namespace.."
 kubectl apply -f k8s/0-init/namespaces.yaml
 
 # ==========================================
+# OPENSEARCH
+# ==========================================
+echo "4. Desplegando OpenSearch.."
+helm repo add opensearch https://opensearch-project.github.io/helm-charts/
+helm repo update
+# sudo sysctl -w vm.max_map_count=262144
+helm upgrade --install opensearch opensearch/opensearch -f k8s/1-observability/opensearch-values.yaml --namespace observability
+kubectl wait --for=condition=Ready pod -l app.kubernetes.io/component=opensearch-cluster-master -n observability --timeout=300s
+# kubectl exec -it opensearch-cluster-master-0 -n observability -- /bin/bash
+# curl -XGET https://localhost:9200 -u 'admin:DemoPass123!' --insecure
+
+# ==========================================
 # JAEGER
 # ==========================================
-echo "3. Desplegando Jaeger.."
+echo "5. Desplegando Jaeger.."
 kubectl apply -f k8s/1-observability/jaeger.yaml
 sleep 10
 kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=jaeger-backend-collector -n observability --timeout=300s
@@ -26,13 +38,13 @@ kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=jaeger-backend-
 # ==========================================
 # OPENTELEMETRY COLLECTOR
 # ==========================================
-echo "3. Desplegando Otel Collector.."
+echo "6. Desplegando Otel Collector.."
 kubectl apply -f k8s/1-observability/otel-collector.yaml
 
 # ==========================================
 # AUTO-INSTRUMENTATION
 # ==========================================
-echo "3. Configurando auto-instrumentación.."
+echo "7. Configurando auto-instrumentación.."
 kubectl apply -f k8s/1-observability/instrumentation.yaml
 
 
