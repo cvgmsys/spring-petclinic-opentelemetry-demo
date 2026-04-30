@@ -17,8 +17,8 @@ fi
 
 echo "🚀 Iniciando generador de carga K6..."
 echo "Selecciona el escenario a ejecutar:"
-echo "1) Escenario 1: Línea Base (Tráfico estable de 5 minutos)"
-echo "2) Escenario 2: Prueba de Estrés (Pico de tráfico) [Pendiente de crear]"
+echo "1) Escenario 1: Línea Base (Tráfico estable de 10 minutos)"
+echo "2) Escenario 2: Prueba de Estrés (Pico de tráfico)"
 echo "0) Salir"
 
 read -p "Elige una opción [0-2]: " opcion
@@ -26,11 +26,11 @@ read -p "Elige una opción [0-2]: " opcion
 case $opcion in
     1)
         echo "Ejecutando Línea Base..."
-        k6 run ./k6/escenario1_base.js
+        k6 run ./k6/baseline_load_test.js
         ;;
     2)
         echo "Ejecutando Prueba de Estrés..."
-        k6 run ./k6/escenario2_estres.js
+        k6 run ./k6/stress_test.js
         ;;
     0)
         exit 0
