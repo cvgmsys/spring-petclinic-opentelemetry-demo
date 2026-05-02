@@ -4,20 +4,15 @@ import { check, sleep } from 'k6';
 const BASE_URL = 'http://localhost:30080';
 
 export const options = {
-  // 100 usuarios concurrentes (10 veces más que la línea base)
-  vus: 100,
-  // Solo 5 minutos. Es un pico agresivo, suficiente para saturar la CPU
-  duration: '5m',
+  stages: [
+    { duration: '30s', target: 150 },  
+    { duration: '3m', target: 180 }, 
+    { duration: '30s', target: 80 },  
+  ],
 };
 
 export default function () {
-  // Los usuarios atacan directamente la consulta de la base de datos de veterinarios
-  // a través del API Gateway
   let res = http.get(`${BASE_URL}/api/vet/vets`);
-  
   check(res, { 'Veterinarios responde': (r) => r.status === 200 });
-  
-  // Apenas hay tiempo de espera (0.1s), forzando peticiones casi continuas
-  // para agotar los milicores del contenedor lo antes posible.
-  sleep(0.1); 
+  sleep(0.5); 
 }

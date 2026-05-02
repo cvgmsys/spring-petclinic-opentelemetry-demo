@@ -12,13 +12,12 @@ data:
         name: api-gateway
       cloud:
         gateway:
+          httpclient:
+            response-timeout: 40s
+            connect-timeout: 40s
           server:
             webflux:
               default-filters:
-                - name: CircuitBreaker
-                  args:
-                    name: defaultCircuitBreaker
-                    fallbackUri: forward:/fallback
                 - name: Retry
                   args:
                     retries: 1

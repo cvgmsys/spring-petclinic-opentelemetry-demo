@@ -40,9 +40,10 @@ spec:
               command: ["sh", "-c", "sleep 10"]
         resources:
           limits:
+            cpu: 300m
             memory: 1Gi
           requests:
-            cpu: 500m
+            cpu: 200m
             memory: 512Mi
         env:
         - name: SPRING_PROFILES_ACTIVE
