@@ -2,7 +2,6 @@
 
 set -e
 
-# Comprobamos que se ha pasado exactamente un parámetro
 if [ "$#" -ne 1 ]; then
     echo "Error: Se requiere un parámetro."
     echo "Uso: $0 {up|clean}"
@@ -38,7 +37,6 @@ case "$ACTION" in
         ;;
         
     *)
-        # Si se recibe un parámetro que no es 'up' o 'clean'
         echo "Parámetro no reconocido: $ACTION"
         echo "Uso: $0 {up|clean}"
         exit 1

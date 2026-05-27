@@ -3,7 +3,7 @@
 echo "🧹 Iniciando la eliminación de las herramientas de Observabilidad en Kubernetes..."
 
 # ==========================================
-# AUTO-INSTRUMENTATION, COLLECTOR Y JAEGER
+# AUTO-INSTRUMENTACION, COLLECTOR Y JAEGER
 # ==========================================
 echo "1. Eliminando Instrumentación, Otel Collector y Jaeger..."
 kubectl delete -f k8s/1-observability/instrumentation.yaml --ignore-not-found=true
