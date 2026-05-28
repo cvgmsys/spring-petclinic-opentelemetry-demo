@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  namespace: spring-petclinic
+  labels:
+    app: api-gateway
+data:
+  application.yml: |
+    spring:
+      application:
+        name: api-gateway
+      cloud:
+        gateway:
+          httpclient:
+            response-timeout: 40s
+            connect-timeout: 40s
+          server:
+            webflux:
+              default-filters:
+                - name: Retry
+                  args:
+                    retries: 1
+                    statuses: SERVICE_UNAVAILABLE
+                    methods: POST
+              routes:
+                - id: vets-service
+                  uri: http://vets-service:8080
+                  predicates:
+                    - Path=/api/vet/**
+                  filters:
+                    - StripPrefix=2
+                - id: visits-service
+                  uri: http://visits-service:8080
+                  predicates:
+                    - Path=/api/visit/**
+                  filters:
+                    - StripPrefix=2
+                - id: customers-service
+                  uri: http://customers-service:8080
+                  predicates:
+                    - Path=/api/customer/**
+                  filters:
+                    - StripPrefix=2
+
+    server:
+      port: 8080
+      shutdown: graceful
+      compression:
+        enabled: true
+        mime-types: application/json,text/css,application/javascript
+        min-response-size: 2048
+
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
+    
+    logging:
+      level:
+        org:
+          springframework: INFO
