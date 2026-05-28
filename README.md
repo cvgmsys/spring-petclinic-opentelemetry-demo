@@ -20,7 +20,7 @@ El proyecto toma como base la aplicación de demostración [Spring Petclinic Mic
 
 ## 🚀 Puesta en Marcha y Experimentación
 
-Para poner en marcha el entorno y ejecutar los experimentos se ha elaborado una **[Guía Técnica de Despliegue y Ejecución](docs/Guia_Tecnica_de_Despliegue_y_Ejecucion.pdf)** ubicada en la carpeta `docs/`. En este documento aparecen:
+Para poner en marcha el entorno y ejecutar los experimentos se ha elaborado una **[Guía Técnica de Despliegue y Ejecución](docs/GuiaTecnicaDespliegue.pdf)** ubicada en la carpeta `docs/`. En este documento aparecen:
 1. Las instrucciones para aprovisionar la máquina virtual base y levantar el clúster K3s.
 2. Los comandos para compilar el código y desplegar el ecosistema completo empaquetados en scripts.
 3. Los pasos para ejecutar los **cuatro escenarios prácticos** evaluados en el TFG:
